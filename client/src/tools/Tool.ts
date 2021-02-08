@@ -1,15 +1,13 @@
 export default class Tool {
   canvas: HTMLCanvasElement | null = null
   canvasContext: CanvasRenderingContext2D | null = null;
-  username: string | undefined = undefined
   socket: any = null
   sessionId: string | undefined = undefined
 
-  constructor(canvas: HTMLCanvasElement, socket: any, sessionId: string, username: string) {
+  constructor(canvas: HTMLCanvasElement, socket: any, sessionId: string) {
     this.canvas = canvas;
     this.socket = socket;
     this.sessionId = sessionId;
-    this.username = username;
     this.canvasContext = canvas.getContext('2d');
     this.destroyEvents();
   }

@@ -3,8 +3,8 @@ import Tool from "./Tool";
 export default class Eraser extends Tool {
   mouseDown: boolean = false;
 
-  constructor(canvas, socket, sessionId, username) {
-    super(canvas, socket, sessionId, username);
+  constructor(canvas, socket, sessionId) {
+    super(canvas, socket, sessionId);
     this.listen();
   }
 
@@ -45,31 +45,18 @@ export default class Eraser extends Tool {
       figure: {
         x: pageX - offsetLeft,
         y: pageY - offsetTop,
-        username: this.username,
         lineWidth: this.canvasContext.lineWidth,
         type: "eraser"
       }
     }))
   }
 
-  static draw (canvasContext: CanvasRenderingContext2D, x: number, y: number, lineWidth: number, currentUsername: string, requestUsername: string, strokeColor: string) {
+  static draw (canvasContext: CanvasRenderingContext2D, x: number, y: number, lineWidth: number, strokeColor: string) {
     if (!canvasContext) return;
-
-    if (currentUsername === requestUsername) {
       canvasContext.lineTo(x, y);
       canvasContext.strokeStyle = "#fff"
       canvasContext.lineWidth = lineWidth;
       canvasContext.stroke();
       canvasContext.strokeStyle = strokeColor;
-    }
-    if (currentUsername !== requestUsername) {
-      canvasContext.beginPath();
-      canvasContext.moveTo(x, y);
-      canvasContext.lineTo(x + 1, y + 1);
-      canvasContext.strokeStyle = "#fff"
-      canvasContext.lineWidth = lineWidth;
-      canvasContext.stroke();
-      canvasContext.strokeStyle = strokeColor;
-    }
   }
 }

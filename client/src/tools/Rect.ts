@@ -8,8 +8,8 @@ export default class Rect extends Tool {
   width: number = 0;
   canvasImg: any = null;
 
-  constructor(canvas, socket, sessionId, username) {
-    super(canvas, socket, sessionId, username);
+  constructor(canvas, socket, sessionId) {
+    super(canvas, socket, sessionId);
     this.listen();
   }
 
@@ -37,7 +37,6 @@ export default class Rect extends Tool {
         y: this.startY,
         height: this.height,
         weight: this.width,
-        username: this.username,
         strokeColor: this.canvasContext.strokeStyle,
         fillColor: this.canvasContext.fillStyle,
         type: "rect"
@@ -82,8 +81,8 @@ export default class Rect extends Tool {
     }
   }
 
-  static staticDraw(canvasContext, x: number, y: number, height: number, weight: number, strokeColor: string, fillColor: string, currentUsername: string, requestUsername: string) {
-    if (!canvasContext || currentUsername !== requestUsername) return;
+  static staticDraw(canvasContext, x: number, y: number, height: number, weight: number, strokeColor: string, fillColor: string) {
+    if (!canvasContext) return;
     canvasContext.rect(x, y, height, weight);
     canvasContext.strokeStyle = strokeColor;
     canvasContext.fillStyle = fillColor;

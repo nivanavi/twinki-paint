@@ -51,7 +51,7 @@ export const Canvas = observer(() => {
     const socket = new WebSocket(`ws://${ADDRESS}:${PORT}/`);
     canvasState.setSocket(socket);
     canvasState.setSessionId(id);
-    toolState.setTool(new Brush(canvasRef.current, socket, id, canvasState.username))
+    toolState.setTool(new Brush(canvasRef.current, socket, id))
     socket.onopen = () => {
       socket.send((JSON.stringify({
         method: "connection",
@@ -94,19 +94,19 @@ export const Canvas = observer(() => {
     if (!canvasContext || !canvasState.username) return;
     switch (figure.type) {
       case "brush":
-        Brush.draw(canvasContext, figure.x, figure.y, figure.strokeColor, figure.lineWidth, canvasState.username, figure.username);
+        Brush.draw(canvasContext, figure.x, figure.y, figure.strokeColor, figure.lineWidth);
         break;
       case "rect":
-        Rect.staticDraw(canvasContext, figure.x, figure.y, figure.height, figure.weight, figure.strokeColor, figure.fillColor, canvasState.username, figure.username);
+        Rect.staticDraw(canvasContext, figure.x, figure.y, figure.height, figure.weight, figure.strokeColor, figure.fillColor);
         break;
       case "eraser":
-        Eraser.draw(canvasContext, figure.x, figure.y, figure.lineWidth, canvasState.username, figure.username, toolState.strokeColor);
+        Eraser.draw(canvasContext, figure.x, figure.y, figure.lineWidth, toolState.strokeColor);
         break;
       case "circle":
-        Circle.staticDraw(canvasContext, figure.x, figure.y, figure.radius, figure.strokeColor, figure.fillColor, canvasState.username, figure.username);
+        Circle.staticDraw(canvasContext, figure.x, figure.y, figure.radius, figure.strokeColor, figure.fillColor);
         break;
       case "line":
-        Line.staticDraw(canvasContext, figure.currentX, figure.currentY, figure.x, figure.y, figure.strokeColor, figure.lineWidth, canvasState.username, figure.username);
+        Line.staticDraw(canvasContext, figure.currentX, figure.currentY, figure.x, figure.y, figure.strokeColor, figure.lineWidth);
         break;
       case "undoRedo":
         canvasState.undoRedo(figure.dataUrl);

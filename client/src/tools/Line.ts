@@ -8,8 +8,8 @@ export default class Line extends Tool {
   startY: number = 0;
   canvasImg: any = null;
 
-  constructor(canvas, socket, sessionId, username) {
-    super(canvas, socket, sessionId, username);
+  constructor(canvas, socket, sessionId) {
+    super(canvas, socket, sessionId);
     this.listen();
   }
 
@@ -32,7 +32,6 @@ export default class Line extends Tool {
         currentY: this.currentY,
         x: this.startX,
         y: this.startY,
-        username: this.username,
         strokeColor: this.canvasContext.strokeStyle,
         lineWidth: this.canvasContext.lineWidth,
         type: "line"
@@ -81,8 +80,8 @@ export default class Line extends Tool {
     }
   }
 
-  static staticDraw(canvasContext: CanvasRenderingContext2D, currentX: number, currentY: number, x: number, y: number, strokeColor: string, lineWidth: number, currentUsername: string, requestUsername: string) {
-    if (!canvasContext || currentUsername !== requestUsername) return;
+  static staticDraw(canvasContext: CanvasRenderingContext2D, currentX: number, currentY: number, x: number, y: number, strokeColor: string, lineWidth: number) {
+    if (!canvasContext) return;
     canvasContext.moveTo(currentX, currentY)
     canvasContext.lineTo(x, y)
     canvasContext.lineWidth = lineWidth;

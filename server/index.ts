@@ -46,6 +46,17 @@ app.get('/image', (req, res) => {
   }
 })
 
+app.get('/test', (req, res) => {
+  try {
+    res.json({
+      norm: "nu da norm poluchaeca"
+    })
+  } catch (e) {
+    console.log(e)
+    return res.status(500).json({message: "error test test test"})
+  }
+})
+
 app.listen(PORT, () => console.log(`Server started on port: ${PORT}`));
 
 const connectionHandler = (ws, data) => {

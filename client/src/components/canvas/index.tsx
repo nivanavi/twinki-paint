@@ -13,6 +13,7 @@ import Line           from "../../tools/Line";
 import axios          from 'axios';
 
 const PORT: string | undefined = process.env.PORT || "1337";
+const ADDRESS: string = "176.99.11.14";
 
 export const Canvas = observer(() => {
   const {id}: any = useParams();
@@ -25,7 +26,7 @@ export const Canvas = observer(() => {
     if (!canvasContext) return;
     canvasState.setCanvas(canvasRef.current)
     const {width, height} = canvasRef.current;
-    axios.get(`http://localhost:${PORT}/image?id=${id}`)
+    axios.get(`http://${ADDRESS}:${PORT}/image?id=${id}`)
       .then(response => {
         const img = new Image()
         img.src = response.data
@@ -47,7 +48,7 @@ export const Canvas = observer(() => {
 
   React.useEffect(() => {
     if (!canvasState.username) return;
-    const socket = new WebSocket(`ws://localhost:${PORT}/`);
+    const socket = new WebSocket(`ws://${ADDRESS}:${PORT}/`);
     canvasState.setSocket(socket);
     canvasState.setSessionId(id);
     toolState.setTool(new Brush(canvasRef.current, socket, id))
@@ -80,7 +81,7 @@ export const Canvas = observer(() => {
 
   const mouseUpHandler = () => {
     if (!canvasRef.current) return;
-    axios.post(`http://localhost:${PORT}/image?id=${id}`, {img: canvasRef.current.toDataURL()})
+    axios.post(`http://${ADDRESS}:${PORT}/image?id=${id}`, {img: canvasRef.current.toDataURL()})
       .then(response => console.log(response.data))
       .catch(error => console.log(error))
   }

@@ -1,0 +1,41 @@
+@font-face {
+    font-family: 'Futura PT Demi';
+    src: local('Futura PT Demi'), local('Futura-PT-Demi'),
+    url('FuturaPT-Demi.woff2') format('woff2'),
+    url('FuturaPT-Demi.woff') format('woff'),
+    url('FuturaPT-Demi.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body * {
+    font-family: Verdana;
+}
+
+body h1 {
+    font-family: "Futura PT Demi";
+    font-size: 4rem;
+    line-height: 5rem;
+}
+body h2 {
+    font-family: "Futura PT Demi", serif;
+    font-size: 3.2rem;
+    line-height: 4rem;
+}
+body h3 {
+    font-family: "Futura PT Demi", serif;
+    font-size: 2.4rem;
+    line-height: 3rem;
+}
+body h4 {
+    font-family: "Verdana";
+    font-weight: bold;
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+}
+body h5 {
+    font-family: "Verdana";
+    font-weight: bold;
+    font-size: 1.4rem;
+    line-height: 2rem;
+}

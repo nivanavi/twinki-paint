@@ -1,0 +1,47 @@
+html {
+    font-size: 10px;
+}
+
+_:default:not(:root:root), html {
+    animation: webkitfix 1s forwards infinite;
+}
+
+:root {
+    --scrollbar: 0;
+}
+
+@keyframes webkitfix {
+    100% {
+        z-index: auto;
+    }
+}
+
+@media screen and ( max-width: 374px ) {
+    html {
+        font-size: calc(8px + 1 * (100vw - 320px) / 54);
+    }
+}
+
+@media screen and ( min-width: 375px ) and ( max-width: 767px ) {
+    html {
+        font-size: calc(10px + 10 * (100vw - 375px) / 392);
+    }
+}
+
+@media ( min-width: 768px ) and ( max-width: 1360px ) {
+    html {
+        font-size: calc(8px + 2 * (100vw - 1024px) / 336);
+    }
+}
+
+@media ( min-width: 1600px ) {
+    html {
+        font-size: calc(10px + 2 * (100vw - 1600px) / 240);
+    }
+}
+
+@media (min-width: 1440px) {
+    html {
+        font-size: 10px;
+    }
+}

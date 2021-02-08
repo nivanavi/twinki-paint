@@ -100,7 +100,7 @@ export const Canvas = observer(() => {
         Rect.staticDraw(canvasContext, figure.x, figure.y, figure.height, figure.weight, figure.strokeColor, figure.fillColor, canvasState.username, figure.username);
         break;
       case "eraser":
-        Eraser.draw(canvasContext, figure.x, figure.y, figure.lineWidth, canvasState.username, figure.username);
+        Eraser.draw(canvasContext, figure.x, figure.y, figure.lineWidth, canvasState.username, figure.username, toolState.strokeColor);
         break;
       case "circle":
         Circle.staticDraw(canvasContext, figure.x, figure.y, figure.radius, figure.strokeColor, figure.fillColor, canvasState.username, figure.username);

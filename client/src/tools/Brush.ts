@@ -54,10 +54,19 @@ export default class Brush extends Tool {
   }
 
   static draw (canvasContext: CanvasRenderingContext2D, x: number, y: number, strokeColor: string, lineWidth: number, currentUsername: string, requestUsername: string) {
-    if (currentUsername !== requestUsername) return;
-    canvasContext.lineTo(x, y);
-    canvasContext.strokeStyle = strokeColor;
-    canvasContext.lineWidth = lineWidth;
-    canvasContext.stroke();
+    if (currentUsername === requestUsername) {
+      canvasContext.lineTo(x, y);
+      canvasContext.strokeStyle = strokeColor;
+      canvasContext.lineWidth = lineWidth;
+      canvasContext.stroke();
+    }
+    if (currentUsername !== requestUsername) {
+      canvasContext.beginPath();
+      canvasContext.moveTo(x, y);
+      canvasContext.lineTo(x + 1, y + 1);
+      canvasContext.strokeStyle = strokeColor;
+      canvasContext.lineWidth = lineWidth;
+      canvasContext.stroke();
+    }
   }
 }

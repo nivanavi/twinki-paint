@@ -52,11 +52,24 @@ export default class Eraser extends Tool {
     }))
   }
 
-  static draw (canvasContext: CanvasRenderingContext2D, x: number, y: number, lineWidth: number, currentUsername: string, requestUsername: string) {
-    if (!canvasContext || currentUsername !== requestUsername) return;
-    canvasContext.lineTo(x, y);
-    canvasContext.strokeStyle = "#fff"
-    canvasContext.lineWidth = lineWidth;
-    canvasContext.stroke();
+  static draw (canvasContext: CanvasRenderingContext2D, x: number, y: number, lineWidth: number, currentUsername: string, requestUsername: string, strokeColor: string) {
+    if (!canvasContext) return;
+
+    if (currentUsername === requestUsername) {
+      canvasContext.lineTo(x, y);
+      canvasContext.strokeStyle = "#fff"
+      canvasContext.lineWidth = lineWidth;
+      canvasContext.stroke();
+      canvasContext.strokeStyle = strokeColor;
+    }
+    if (currentUsername !== requestUsername) {
+      canvasContext.beginPath();
+      canvasContext.moveTo(x, y);
+      canvasContext.lineTo(x + 1, y + 1);
+      canvasContext.strokeStyle = "#fff"
+      canvasContext.lineWidth = lineWidth;
+      canvasContext.stroke();
+      canvasContext.strokeStyle = strokeColor;
+    }
   }
 }

@@ -12,7 +12,7 @@ import Circle         from "../../tools/Circle";
 import Line           from "../../tools/Line";
 import axios          from 'axios';
 
-const PORT: string | undefined = process.env.PORT;
+const PORT: string | undefined = process.env.PORT || "1337";
 
 export const Canvas = observer(() => {
   const {id}: any = useParams();

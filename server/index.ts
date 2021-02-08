@@ -32,7 +32,7 @@ app.post('/image', (req, res) => {
     return res.status(200).json({message: "loaded"})
   } catch (e) {
     console.log(e)
-    return res.status(500).json({message: "error"})
+    return res.status(500).json({message: "error save img"})
   }
 })
 app.get('/image', (req, res) => {
@@ -42,18 +42,7 @@ app.get('/image', (req, res) => {
     res.json(data)
   } catch (e) {
     console.log(e)
-    return res.status(500).json({message: "error"})
-  }
-})
-
-app.get('/test', (req, res) => {
-  try {
-    res.json({
-      norm: "nu da norm poluchaeca"
-    })
-  } catch (e) {
-    console.log(e)
-    return res.status(500).json({message: "error test test test"})
+    return res.status(500).json({message: "error get img"})
   }
 })
 

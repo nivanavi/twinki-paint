@@ -1,4 +1,8 @@
 import {makeAutoObservable} from "mobx";
+import axios                from "axios";
+
+const PORT: string | undefined = process.env.REACT_APP_PORT;
+const ADDRESS: string | undefined = process.env.REACT_APP_ADDRESS;
 
 class CanvasState {
   canvas: HTMLCanvasElement | null = null;
@@ -59,6 +63,31 @@ class CanvasState {
         type: "undoRedo"
       }
     }))
+  }
+
+  clearAllSend: () => void = () => {
+    this.socket.send(JSON.stringify({
+      method: "draw",
+      id: this.sessionId,
+      figure: {
+        type: "clear"
+      }
+    }))
+  }
+
+  clearAll: () => void = () => {
+    if (!this.canvas) return;
+    const canvasContext = this.canvas.getContext('2d');
+    if (!canvasContext) return;
+    canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height)
+    this.saveImage();
+  }
+
+  saveImage: () => void = () => {
+    if (!this.canvas) return;
+    axios.post(`http://${ADDRESS}:${PORT}/image?id=${this.sessionId}`, {img: this.canvas.toDataURL()})
+      .then(response => console.log(response.data))
+      .catch(error => console.log(error))
   }
 
   undo: () => void = () => {

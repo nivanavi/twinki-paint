@@ -12,8 +12,8 @@ import Circle         from "../../tools/Circle";
 import Line           from "../../tools/Line";
 import axios          from 'axios';
 
-const PORT: string | undefined = process.env.PORT || "1337";
-const ADDRESS: string = "176.99.11.14";
+const PORT: string | undefined = process.env.REACT_APP_PORT;
+const ADDRESS: string | undefined = process.env.REACT_APP_ADDRESS;
 
 export const Canvas = observer(() => {
   const {id}: any = useParams();
@@ -81,9 +81,7 @@ export const Canvas = observer(() => {
 
   const mouseUpHandler = () => {
     if (!canvasRef.current) return;
-    axios.post(`http://${ADDRESS}:${PORT}/image?id=${id}`, {img: canvasRef.current.toDataURL()})
-      .then(response => console.log(response.data))
-      .catch(error => console.log(error))
+    canvasState.saveImage();
   }
 
   const drawHandler = (data) => {
@@ -110,6 +108,9 @@ export const Canvas = observer(() => {
         break;
       case "undoRedo":
         canvasState.undoRedo(figure.dataUrl);
+        break;
+      case "clear":
+        canvasState.clearAll();
         break;
       case "end":
         canvasContext.beginPath();

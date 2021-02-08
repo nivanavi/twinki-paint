@@ -18,6 +18,7 @@ export const ToolBar = () => {
       <button onClick={() => toolState.setTool(new Line(canvasState.canvas, canvasState.socket, canvasState.sessionId))}>линия</button>
       <button onClick={() => canvasState.redo()}>отменить</button>
       <button onClick={() => canvasState.undo()}>вернуть</button>
+      <button onClick={() => canvasState.clearAll()}>очистить все</button>
     </StyledToolBar>
   );
 };

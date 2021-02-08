@@ -41,12 +41,14 @@ export default class Brush extends Tool {
         y: pageY - offsetTop,
         strokeColor: this.canvasContext.strokeStyle,
         lineWidth: this.canvasContext.lineWidth,
+        sessionId: this.sessionId,
         type: "brush"
       }
     }))
   }
 
-  static draw (canvasContext: CanvasRenderingContext2D, x: number, y: number, strokeColor: string, lineWidth: number) {
+  static draw (canvasContext: CanvasRenderingContext2D, x: number, y: number, strokeColor: string, lineWidth: number, currentSession: string, requestSession: string) {
+    if (currentSession !== requestSession) return;
     canvasContext.lineTo(x, y);
     canvasContext.strokeStyle = strokeColor;
     canvasContext.lineWidth = lineWidth;

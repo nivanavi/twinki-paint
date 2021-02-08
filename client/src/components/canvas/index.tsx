@@ -91,10 +91,10 @@ export const Canvas = observer(() => {
     const {figure} = data;
     console.log("figure", figure)
     const canvasContext = canvasRef.current.getContext('2d');
-    if (!canvasContext) return;
+    if (!canvasContext || !canvasState.sessionId) return;
     switch (figure.type) {
       case "brush":
-        Brush.draw(canvasContext, figure.x, figure.y, figure.strokeColor, figure.lineWidth);
+        Brush.draw(canvasContext, figure.x, figure.y, figure.strokeColor, figure.lineWidth, canvasState.sessionId, figure.sessionId);
         break;
       case "rect":
         Rect.staticDraw(canvasContext, figure.x, figure.y, figure.height, figure.weight, figure.strokeColor, figure.fillColor);

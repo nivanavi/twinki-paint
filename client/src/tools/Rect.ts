@@ -37,6 +37,7 @@ export default class Rect extends Tool {
         y: this.startY,
         height: this.height,
         weight: this.width,
+        username: this.username,
         strokeColor: this.canvasContext.strokeStyle,
         fillColor: this.canvasContext.fillStyle,
         type: "rect"

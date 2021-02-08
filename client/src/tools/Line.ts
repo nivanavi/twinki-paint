@@ -32,6 +32,7 @@ export default class Line extends Tool {
         currentY: this.currentY,
         x: this.startX,
         y: this.startY,
+        username: this.username,
         strokeColor: this.canvasContext.strokeStyle,
         lineWidth: this.canvasContext.lineWidth,
         type: "line"

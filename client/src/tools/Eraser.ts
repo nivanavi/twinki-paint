@@ -45,6 +45,7 @@ export default class Eraser extends Tool {
       figure: {
         x: pageX - offsetLeft,
         y: pageY - offsetTop,
+        username: this.username,
         lineWidth: this.canvasContext.lineWidth,
         type: "eraser"
       }

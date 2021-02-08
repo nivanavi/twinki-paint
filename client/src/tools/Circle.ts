@@ -30,6 +30,7 @@ export default class Circle extends Tool {
         x: this.startX,
         y: this.startY,
         radius: this.radius,
+        username: this.username,
         strokeColor: this.canvasContext.strokeStyle,
         fillColor: this.canvasContext.fillStyle,
         type: "circle"

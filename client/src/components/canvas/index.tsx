@@ -51,7 +51,7 @@ export const Canvas = observer(() => {
     const socket = new WebSocket(`ws://${ADDRESS}:${PORT}/`);
     canvasState.setSocket(socket);
     canvasState.setSessionId(id);
-    toolState.setTool(new Brush(canvasRef.current, socket, id))
+    toolState.setTool(new Brush(canvasRef.current, socket, id, canvasState.username))
     socket.onopen = () => {
       socket.send((JSON.stringify({
         method: "connection",
@@ -91,22 +91,22 @@ export const Canvas = observer(() => {
     const {figure} = data;
     console.log("figure", figure)
     const canvasContext = canvasRef.current.getContext('2d');
-    if (!canvasContext || !canvasState.sessionId) return;
+    if (!canvasContext || !canvasState.username) return;
     switch (figure.type) {
       case "brush":
-        Brush.draw(canvasContext, figure.x, figure.y, figure.strokeColor, figure.lineWidth, canvasState.sessionId, figure.sessionId);
+        Brush.draw(canvasContext, figure.x, figure.y, figure.strokeColor, figure.lineWidth, canvasState.username, figure.username);
         break;
       case "rect":
-        Rect.staticDraw(canvasContext, figure.x, figure.y, figure.height, figure.weight, figure.strokeColor, figure.fillColor);
+        Rect.staticDraw(canvasContext, figure.x, figure.y, figure.height, figure.weight, figure.strokeColor, figure.fillColor, canvasState.username, figure.username);
         break;
       case "eraser":
-        Eraser.draw(canvasContext, figure.x, figure.y, figure.lineWidth);
+        Eraser.draw(canvasContext, figure.x, figure.y, figure.lineWidth, canvasState.username, figure.username);
         break;
       case "circle":
-        Circle.staticDraw(canvasContext, figure.x, figure.y, figure.radius, figure.strokeColor, figure.fillColor);
+        Circle.staticDraw(canvasContext, figure.x, figure.y, figure.radius, figure.strokeColor, figure.fillColor, canvasState.username, figure.username);
         break;
       case "line":
-        Line.staticDraw(canvasContext, figure.currentX, figure.currentY, figure.x, figure.y, figure.strokeColor, figure.lineWidth);
+        Line.staticDraw(canvasContext, figure.currentX, figure.currentY, figure.x, figure.y, figure.strokeColor, figure.lineWidth, canvasState.username, figure.username);
         break;
       case "undoRedo":
         canvasState.undoRedo(figure.dataUrl);

@@ -3,8 +3,8 @@ import Tool from "./Tool";
 export default class Brush extends Tool {
   mouseDown: boolean = false;
 
-  constructor(canvas, socket, sessionId) {
-    super(canvas, socket, sessionId);
+  constructor(canvas, socket, sessionId, username) {
+    super(canvas, socket, sessionId, username);
     this.listen();
   }
 
@@ -13,12 +13,18 @@ export default class Brush extends Tool {
       this.canvas.onmouseup = this.mouseUpHandler.bind(this);
       this.canvas.onmousedown = this.mouseDownHandler.bind(this);
       this.canvas.onmousemove = this.mouseMoveHandler.bind(this);
+      this.canvas.onmouseleave = this.mouseLeaveHandler.bind(this);
   }
 
   mouseUpHandler () {
     this.mouseDown = false;
     this.finishDraw();
   }
+
+  mouseLeaveHandler() {
+    this.mouseDown = false;
+  }
+
 
   mouseDownHandler (ev: MouseEvent) {
     this.mouseDown = true;
@@ -41,14 +47,14 @@ export default class Brush extends Tool {
         y: pageY - offsetTop,
         strokeColor: this.canvasContext.strokeStyle,
         lineWidth: this.canvasContext.lineWidth,
-        sessionId: this.sessionId,
+        username: this.username,
         type: "brush"
       }
     }))
   }
 
-  static draw (canvasContext: CanvasRenderingContext2D, x: number, y: number, strokeColor: string, lineWidth: number, currentSession: string, requestSession: string) {
-    if (currentSession !== requestSession) return;
+  static draw (canvasContext: CanvasRenderingContext2D, x: number, y: number, strokeColor: string, lineWidth: number, currentUsername: string, requestUsername: string) {
+    if (currentUsername !== requestUsername) return;
     canvasContext.lineTo(x, y);
     canvasContext.strokeStyle = strokeColor;
     canvasContext.lineWidth = lineWidth;

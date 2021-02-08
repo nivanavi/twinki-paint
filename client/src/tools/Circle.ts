@@ -7,8 +7,8 @@ export default class Circle extends Tool {
   radius: number = 0;
   canvasImg: any = null;
 
-  constructor(canvas, socket, sessionId) {
-    super(canvas, socket, sessionId);
+  constructor(canvas, socket, sessionId, username) {
+    super(canvas, socket, sessionId, username);
     this.listen();
   }
 
@@ -79,8 +79,9 @@ export default class Circle extends Tool {
     }
   }
 
-  static staticDraw(canvasContext: CanvasRenderingContext2D, x: number, y: number, radius: number, strokeColor: string, fillColor: string) {
-    if (!canvasContext) return;
+  static staticDraw(canvasContext: CanvasRenderingContext2D, x: number, y: number, radius: number, strokeColor: string, fillColor: string, currentUsername: string, requestUsername: string) {
+
+    if (!canvasContext || currentUsername !== requestUsername) return;
     canvasContext.arc(x, y, radius, 0, 2 * Math.PI);
     canvasContext.strokeStyle = strokeColor;
     canvasContext.fillStyle = fillColor;

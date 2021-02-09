@@ -1,6 +1,5 @@
 import Tool        from "./Tool";
 import toolSate    from "../store/toolSate";
-import canvasState from "../store/canvasState";
 
 export default class Brush extends Tool {
   mouseDown: boolean = false;
@@ -76,6 +75,5 @@ export default class Brush extends Tool {
     canvasContext.stroke();
     canvasContext.strokeStyle = toolSate.strokeColor;
     canvasContext.lineWidth = toolSate.lineWidth;
-
   }
 }

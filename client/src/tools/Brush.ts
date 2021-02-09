@@ -33,7 +33,6 @@ export default class Brush extends Tool {
     const {target, pageX, pageY} = ev;
     const {offsetLeft, offsetTop} = target as HTMLCanvasElement;
     if (!this.canvasContext) return;
-    this.canvasContext.beginPath();
     this.canvasContext.moveTo(pageX - offsetLeft, pageY - offsetTop);
     (this.canvasContext as any).prevX = pageX - offsetLeft;
     (this.canvasContext as any).prevY = pageY - offsetTop;
@@ -67,6 +66,7 @@ export default class Brush extends Tool {
                 strokeColor,
                 lineWidth
               }: { canvasContext: any, x: number, y: number, prevX: number, prevY: number, strokeColor: string, lineWidth: number }) {
+    canvasContext.beginPath();
     canvasContext.moveTo(prevX, prevY);
     canvasContext.prevX = x;
     canvasContext.prevY = y;

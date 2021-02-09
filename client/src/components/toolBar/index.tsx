@@ -48,8 +48,9 @@ export const ToolBar = observer(() => {
   }
 
   const copyLinkHandler = () => {
-    navigator.clipboard.writeText(`http://${ADDRESS}:3000${pathname}`);
-    notificationState.addNotification({type: "success", text: "Ссылка скопирована в буфер обмена"})
+    navigator.clipboard.writeText(`http://${ADDRESS}:3000${pathname}`)
+      .then(() => notificationState.addNotification({type: "success", text: "Ссылка скопирована в буфер обмена"}))
+      .catch(() => notificationState.addNotification({type: "error", text: "Не удалось скопировать ссылку"}));
   }
 
   return (

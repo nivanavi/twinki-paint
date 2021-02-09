@@ -1,5 +1,6 @@
-import Tool     from "./Tool";
-import toolSate from "../store/toolSate";
+import Tool        from "./Tool";
+import toolSate    from "../store/toolSate";
+import canvasState from "../store/canvasState";
 
 export default class Eraser extends Tool {
   mouseDown: boolean = false;
@@ -32,8 +33,9 @@ export default class Eraser extends Tool {
     const {target, pageX, pageY} = ev;
     const {offsetLeft, offsetTop} = target as HTMLCanvasElement;
     if (!this.canvasContext) return;
-    this.canvasContext.beginPath();
-    this.canvasContext.moveTo(pageX - offsetLeft, pageY - offsetTop)
+    this.canvasContext.moveTo(pageX - offsetLeft, pageY - offsetTop);
+    (this.canvasContext as any)[`prevX${canvasState.username}`] = pageX - offsetLeft;
+    (this.canvasContext as any)[`prevY${canvasState.username}`] = pageY - offsetTop;
   }
 
   mouseMoveHandler (ev: MouseEvent) {
@@ -46,19 +48,26 @@ export default class Eraser extends Tool {
       figure: {
         x: pageX - offsetLeft,
         y: pageY - offsetTop,
+        prevX: (this.canvasContext as any)[`prevX${canvasState.username}`],
+        prevY: (this.canvasContext as any)[`prevY${canvasState.username}`],
+        username: canvasState.username,
         lineWidth: this.canvasContext.lineWidth,
         type: "eraser"
       }
     }))
   }
 
-  static draw ({canvasContext, x, y, lineWidth} : {canvasContext: CanvasRenderingContext2D, x: number, y: number, lineWidth: number}) {
+  static draw ({canvasContext, x, y, lineWidth, prevY, username, prevX} : {canvasContext: any, username: string, prevX: number, prevY: number, x: number, y: number, lineWidth: number}) {
     if (!canvasContext) return;
-      canvasContext.lineTo(x, y);
-      canvasContext.strokeStyle = "#fff"
-      canvasContext.lineWidth = lineWidth;
-      canvasContext.stroke();
-      canvasContext.strokeStyle = toolSate.strokeColor;
-      canvasContext.lineWidth = toolSate.lineWidth;
+    canvasContext.beginPath();
+    canvasContext.moveTo(prevX, prevY);
+    canvasContext[`prevX${username}`] = x;
+    canvasContext[`prevY${username}`] = y;
+    canvasContext.lineTo(x, y);
+    canvasContext.strokeStyle = "#fff"
+    canvasContext.lineWidth = lineWidth;
+    canvasContext.stroke();
+    canvasContext.strokeStyle = toolSate.strokeColor;
+    canvasContext.lineWidth = toolSate.lineWidth;
   }
 }

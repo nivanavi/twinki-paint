@@ -1,4 +1,4 @@
-import Tool     from "./Tool";
+import Tool from "./Tool";
 import toolSate from "../store/toolSate";
 
 export default class Brush extends Tool {
@@ -9,15 +9,15 @@ export default class Brush extends Tool {
     this.listen();
   }
 
-  listen () {
+  listen() {
     if (!this.canvas) return;
-      this.canvas.onmouseup = this.mouseUpHandler.bind(this);
-      this.canvas.onmousedown = this.mouseDownHandler.bind(this);
-      this.canvas.onmousemove = this.mouseMoveHandler.bind(this);
-      this.canvas.onmouseleave = this.mouseLeaveHandler.bind(this);
+    this.canvas.onmouseup = this.mouseUpHandler.bind(this);
+    this.canvas.onmousedown = this.mouseDownHandler.bind(this);
+    this.canvas.onmousemove = this.mouseMoveHandler.bind(this);
+    this.canvas.onmouseleave = this.mouseLeaveHandler.bind(this);
   }
 
-  mouseUpHandler () {
+  mouseUpHandler() {
     this.mouseDown = false;
     this.finishDraw();
   }
@@ -27,16 +27,18 @@ export default class Brush extends Tool {
   }
 
 
-  mouseDownHandler (ev: MouseEvent) {
+  mouseDownHandler(ev: MouseEvent) {
     this.mouseDown = true;
     const {target, pageX, pageY} = ev;
     const {offsetLeft, offsetTop} = target as HTMLCanvasElement;
     if (!this.canvasContext) return;
     this.canvasContext.beginPath();
-    this.canvasContext.moveTo(pageX - offsetLeft, pageY - offsetTop)
+    this.canvasContext.moveTo(pageX - offsetLeft, pageY - offsetTop);
+    (this.canvasContext as any).prevX = pageX - offsetLeft;
+    (this.canvasContext as any).prevY = pageY - offsetTop;
   }
 
-  mouseMoveHandler (ev: MouseEvent) {
+  mouseMoveHandler(ev: MouseEvent) {
     if (!this.mouseDown || !this.canvasContext) return;
     const {target, pageX, pageY} = ev;
     const {offsetLeft, offsetTop} = target as HTMLCanvasElement;
@@ -53,12 +55,22 @@ export default class Brush extends Tool {
     }))
   }
 
-  static draw ({canvasContext, x, y, strokeColor, lineWidth}:{canvasContext: CanvasRenderingContext2D, x: number, y: number, strokeColor: string, lineWidth: number}) {
-      canvasContext.lineTo(x, y);
-      canvasContext.strokeStyle = strokeColor;
-      canvasContext.lineWidth = lineWidth;
-      canvasContext.stroke();
-      canvasContext.strokeStyle = toolSate.strokeColor;
-      canvasContext.lineWidth = toolSate.lineWidth;
+  static draw({
+                canvasContext,
+                x,
+                y,
+                strokeColor,
+                lineWidth
+              }: { canvasContext: any, x: number, y: number, strokeColor: string, lineWidth: number }) {
+    canvasContext.moveTo(canvasContext.prevX, canvasContext.prevY);
+    canvasContext.prevX = x;
+    canvasContext.prevY = y;
+    canvasContext.lineTo(x, y);
+    canvasContext.strokeStyle = strokeColor;
+    canvasContext.lineWidth = lineWidth;
+    canvasContext.stroke();
+    canvasContext.strokeStyle = toolSate.strokeColor;
+    canvasContext.lineWidth = toolSate.lineWidth;
+
   }
 }

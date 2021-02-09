@@ -1,5 +1,6 @@
 import Tool        from "./Tool";
 import toolSate    from "../store/toolSate";
+import canvasState from "../store/canvasState";
 
 export default class Brush extends Tool {
   mouseDown: boolean = false;
@@ -33,8 +34,8 @@ export default class Brush extends Tool {
     const {offsetLeft, offsetTop} = target as HTMLCanvasElement;
     if (!this.canvasContext) return;
     this.canvasContext.moveTo(pageX - offsetLeft, pageY - offsetTop);
-    (this.canvasContext as any).prevX = pageX - offsetLeft;
-    (this.canvasContext as any).prevY = pageY - offsetTop;
+    (this.canvasContext as any)[`prevX${canvasState.username}`] = pageX - offsetLeft;
+    (this.canvasContext as any)[`prevY${canvasState.username}`] = pageY - offsetTop;
   }
 
   mouseMoveHandler(ev: MouseEvent) {
@@ -47,8 +48,9 @@ export default class Brush extends Tool {
       figure: {
         x: pageX - offsetLeft,
         y: pageY - offsetTop,
-        prevX: (this.canvasContext as any).prevX,
-        prevY: (this.canvasContext as any).prevY,
+        prevX: (this.canvasContext as any)[`prevX${canvasState.username}`],
+        prevY: (this.canvasContext as any)[`prevY${canvasState.username}`],
+        username: canvasState.username,
         strokeColor: this.canvasContext.strokeStyle,
         lineWidth: this.canvasContext.lineWidth,
         type: "brush"
@@ -62,13 +64,13 @@ export default class Brush extends Tool {
                 y,
     prevX,
     prevY,
+    username,
                 strokeColor,
                 lineWidth
-              }: { canvasContext: any, x: number, y: number, prevX: number, prevY: number, strokeColor: string, lineWidth: number }) {
-    canvasContext.beginPath();
+              }: { canvasContext: any, x: number, y: number, username: string, prevX: number, prevY: number, strokeColor: string, lineWidth: number }) {
     canvasContext.moveTo(prevX, prevY);
-    canvasContext.prevX = x;
-    canvasContext.prevY = y;
+    canvasContext[`prevX${username}`] = x;
+    canvasContext[`prevY${username}`] = y;
     canvasContext.lineTo(x, y);
     canvasContext.strokeStyle = strokeColor;
     canvasContext.lineWidth = lineWidth;

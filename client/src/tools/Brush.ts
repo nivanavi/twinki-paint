@@ -62,10 +62,12 @@ export default class Brush extends Tool {
                 canvasContext,
                 x,
                 y,
+    prevX,
+    prevY,
                 strokeColor,
                 lineWidth
-              }: { canvasContext: any, x: number, y: number, strokeColor: string, lineWidth: number }) {
-    canvasContext.moveTo(canvasContext.prevX, canvasContext.prevY);
+              }: { canvasContext: any, x: number, y: number, prevX: number, prevY: number, strokeColor: string, lineWidth: number }) {
+    canvasContext.moveTo(prevX, prevY);
     canvasContext.prevX = x;
     canvasContext.prevY = y;
     canvasContext.lineTo(x, y);

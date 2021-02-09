@@ -3,6 +3,9 @@ import styled from "styled-components";
 export const StyledToolBar = styled.div`
   .flagButton {
     margin-right: 1rem;
+  }  
+  .linkButton {
+    margin-left: 2rem;
   }
   display: flex;
   justify-content: space-between;

@@ -9,7 +9,7 @@ import Line                                                                     
 import Eraser                                                                          from "../../tools/Eraser";
 import Button                                                                          from "../button/button";
 import {PencilIcon}                                                                    from "../../icons/ui/Pencil";
-import {CircleIcon}      from "../../icons/ui/Ellipse";
+import {CircleIcon}     from "../../icons/ui/Ellipse";
 import {RectIcon}        from "../../icons/ui/Rect";
 import {LineIcon}        from "../../icons/ui/Line";
 import {ReloadIcon}      from "../../icons/ui/Reload";
@@ -19,9 +19,16 @@ import {PanelOpenIcon}   from "../../icons/ui/PanelOpen";
 import {TextButton}      from "../globalStyledComponents";
 import {PanelCloseIcon}  from "../../icons/ui/PanelClose";
 import {observer}        from "mobx-react-lite";
-import logo                             from '../../icons/logo/logo.png'
+import logo              from '../../icons/logo/logo.png'
+import { useHistory } from 'react-router-dom';
+import notificationState from "../../store/notificationState";
+
+const PORT: string | undefined = process.env.REACT_APP_PORT;
+const ADDRESS: string | undefined = process.env.REACT_APP_ADDRESS;
+
 
 export const ToolBar = observer(() => {
+  const {location: {pathname}} = useHistory();
   const saveImgHandler = () => {
     if (!canvasState.canvas) return;
     const link = document.createElement("a");
@@ -38,6 +45,11 @@ export const ToolBar = observer(() => {
 
   const decreaseLineWidth = () => {
     toolState.setLineWidth(toolState.lineWidth - 1);
+  }
+
+  const copyLinkHandler = () => {
+    navigator.clipboard.writeText(`http://${ADDRESS}:3000${pathname}`);
+    notificationState.addNotification({type: "success", text: "Ссылка скопирована в буфер обмена"})
   }
 
   return (
@@ -72,6 +84,13 @@ export const ToolBar = observer(() => {
           <TextButton>{toolState.lineWidth}</TextButton>
           <Button tooltip="Увеличить толщину линии" appearance="icon" onClick={() => increaseLineWidth()}
                   icon={<PanelCloseIcon/>}/>
+          <Button
+            appearance="link"
+            onClick={() => copyLinkHandler()}
+            tooltip="Копировать ссылку для друга"
+          >
+            Ссылка для друга
+          </Button>
         </StyledLineWidth>
       </StyledToolBar>
       <Button appearance="flag" tooltip="Сохранить" icon={<SaveFileIcon/>} onClick={() => saveImgHandler()}/>

@@ -1,4 +1,5 @@
-import Tool from "./Tool";
+import Tool     from "./Tool";
+import toolSate from "../store/toolSate";
 
 export default class Eraser extends Tool {
   mouseDown: boolean = false;
@@ -51,12 +52,13 @@ export default class Eraser extends Tool {
     }))
   }
 
-  static draw (canvasContext: CanvasRenderingContext2D, x: number, y: number, lineWidth: number, strokeColor: string) {
+  static draw ({canvasContext, x, y, lineWidth} : {canvasContext: CanvasRenderingContext2D, x: number, y: number, lineWidth: number}) {
     if (!canvasContext) return;
       canvasContext.lineTo(x, y);
       canvasContext.strokeStyle = "#fff"
       canvasContext.lineWidth = lineWidth;
       canvasContext.stroke();
-      canvasContext.strokeStyle = strokeColor;
+      canvasContext.strokeStyle = toolSate.strokeColor;
+      canvasContext.lineWidth = toolSate.lineWidth;
   }
 }

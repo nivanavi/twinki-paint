@@ -1,10 +1,10 @@
-import React                from 'react';
-import ReactDOM             from 'react-dom';
-import {StyledPaintWrapper} from "./styles";
-import ToolBar              from "./components/toolBar";
-import SettingBar           from "./components/settingBar";
-import Canvas               from "./components/canvas";
+import React                                    from 'react';
+import ReactDOM                                 from 'react-dom';
+import {StyledPaintWrapper}                     from "./styles";
+import ToolBar                                  from "./components/toolBar";
+import Canvas                                   from "./components/canvas";
 import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom'
+import Notifications                            from "./components/notification";
 
 const App = () => {
   return (
@@ -13,11 +13,11 @@ const App = () => {
         <Switch>
           <Route path="/:id">
             <ToolBar/>
-            <SettingBar/>
             <Canvas/>
           </Route>
           <Redirect to={`/nivanavi${new Date().valueOf()}`}/>
         </Switch>
+        <Notifications/>
       </StyledPaintWrapper>
     </BrowserRouter>
   );

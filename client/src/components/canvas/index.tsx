@@ -1,16 +1,16 @@
 import React          from 'react';
 import {StyledCanvas} from "./styles";
-import canvasState    from '../../store/canvasState'
-import toolState      from '../../store/toolSate'
-import Brush          from "../../tools/Brush";
-import {observer}     from "mobx-react-lite";
-import UsernameModal  from "../usernameModal";
-import {useParams}    from 'react-router-dom'
-import Rect           from "../../tools/Rect";
-import Eraser         from "../../tools/Eraser";
-import Circle         from "../../tools/Circle";
-import Line           from "../../tools/Line";
-import axios          from 'axios';
+import canvasState       from '../../store/canvasState'
+import toolState         from '../../store/toolSate'
+import Brush             from "../../tools/Brush";
+import {observer}        from "mobx-react-lite";
+import UsernameModal     from "../usernameModal";
+import {useParams}       from 'react-router-dom'
+import Rect              from "../../tools/Rect";
+import Eraser            from "../../tools/Eraser";
+import Circle            from "../../tools/Circle";
+import Line              from "../../tools/Line";
+import notificationState from "../../store/notificationState";
 
 const PORT: string | undefined = process.env.REACT_APP_PORT;
 const ADDRESS: string | undefined = process.env.REACT_APP_ADDRESS;
@@ -19,25 +19,11 @@ export const Canvas = observer(() => {
   const {id}: any = useParams();
   const canvasRef: { current: null | HTMLCanvasElement } = React.useRef(null);
   const [stateUsernameModal, setUsernameModal] = React.useState<boolean>(false);
-
-  React.useEffect(() => {
-    if (!canvasRef.current) return;
-    const canvasContext = canvasRef.current.getContext('2d');
-    if (!canvasContext) return;
-    canvasState.setCanvas(canvasRef.current)
-    const {width, height} = canvasRef.current;
-    axios.get(`http://${ADDRESS}:${PORT}/image?id=${id}`)
-      .then(response => {
-        const img = new Image()
-        img.src = response.data
-        img.onload = () => {
-          canvasContext.clearRect(0, 0, width, height)
-          canvasContext.drawImage(img, 0, 0, width, height)
-        }
-      })
-      .catch(error => console.log(error))
-    // eslint-disable-next-line
-  }, [])
+  const [stateCanvasArea, setCanvasArea] = React.useState<{ height: number, width: number, isAreaSet: boolean }>({
+    height: 0,
+    width: 0,
+    isAreaSet: false
+  });
 
   React.useEffect(() => {
     const username = localStorage.getItem("username");
@@ -47,11 +33,23 @@ export const Canvas = observer(() => {
   }, [])
 
   React.useEffect(() => {
-    if (!canvasState.username) return;
+    if (!canvasRef.current) return;
+    setCanvasArea({
+      height: window.innerHeight - canvasRef.current.offsetTop,
+      width: window.innerWidth,
+      isAreaSet: true
+    })
+    // eslint-disable-next-line
+  }, [])
+
+  React.useEffect(() => {
+    if (!canvasState.username || !stateCanvasArea.isAreaSet || !canvasRef.current) return;
     const socket = new WebSocket(`ws://${ADDRESS}:${PORT}/`);
+    canvasState.setCanvas(canvasRef.current);
     canvasState.setSocket(socket);
     canvasState.setSessionId(id);
     toolState.setTool(new Brush(canvasRef.current, socket, id))
+    canvasState.setDefaultImage();
     socket.onopen = () => {
       socket.send((JSON.stringify({
         method: "connection",
@@ -64,7 +62,8 @@ export const Canvas = observer(() => {
       const parseData = JSON.parse(data);
       switch (parseData.method) {
         case 'connection':
-          console.log(`User ${parseData.username} connected`)
+          if (canvasState.username === parseData.username) return;
+          notificationState.addNotification({type: "success", text: `К вам подключился ${parseData.username}`})
           break;
         case 'draw':
           drawHandler(parseData);
@@ -72,7 +71,7 @@ export const Canvas = observer(() => {
       }
     }
     // eslint-disable-next-line
-  }, [canvasState.username]);
+  }, [canvasState.username, stateCanvasArea.isAreaSet]);
 
   const mouseDownHandler = () => {
     if (!canvasRef.current) return;
@@ -80,7 +79,8 @@ export const Canvas = observer(() => {
   }
 
   const mouseUpHandler = () => {
-    if (!canvasRef.current) return;
+    // console.log(canvasRef.current)
+    // if (!canvasRef.current) return;
     canvasState.saveImage();
   }
 
@@ -92,19 +92,19 @@ export const Canvas = observer(() => {
     if (!canvasContext || !canvasState.username) return;
     switch (figure.type) {
       case "brush":
-        Brush.draw(canvasContext, figure.x, figure.y, figure.strokeColor, figure.lineWidth);
+        Brush.draw({canvasContext, ...figure});
         break;
       case "rect":
-        Rect.staticDraw(canvasContext, figure.x, figure.y, figure.height, figure.weight, figure.strokeColor, figure.fillColor);
+        Rect.staticDraw({canvasContext, ...figure});
         break;
       case "eraser":
-        Eraser.draw(canvasContext, figure.x, figure.y, figure.lineWidth, toolState.strokeColor);
+        Eraser.draw({canvasContext, ...figure});
         break;
       case "circle":
-        Circle.staticDraw(canvasContext, figure.x, figure.y, figure.radius, figure.strokeColor, figure.fillColor);
+        Circle.staticDraw({canvasContext, ...figure});
         break;
       case "line":
-        Line.staticDraw(canvasContext, figure.currentX, figure.currentY, figure.x, figure.y, figure.strokeColor, figure.lineWidth);
+        Line.staticDraw({canvasContext, ...figure});
         break;
       case "undoRedo":
         canvasState.undoRedo(figure.dataUrl);
@@ -124,8 +124,8 @@ export const Canvas = observer(() => {
         onMouseDown={() => mouseDownHandler()}
         onMouseUp={() => mouseUpHandler()}
         ref={canvasRef}
-        width={600}
-        height={500}
+        width={stateCanvasArea.width}
+        height={stateCanvasArea.height}
       />
       <UsernameModal isOpen={stateUsernameModal} header="Введите свой никнейм" onClose={() => setUsernameModal(false)}/>
     </StyledCanvas>

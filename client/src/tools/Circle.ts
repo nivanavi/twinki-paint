@@ -1,4 +1,5 @@
-import Tool from "./Tool";
+import Tool     from "./Tool";
+import toolSate from "../store/toolSate";
 
 export default class Circle extends Tool {
   mouseDown: boolean = false;
@@ -79,13 +80,21 @@ export default class Circle extends Tool {
     }
   }
 
-  static staticDraw(canvasContext: CanvasRenderingContext2D, x: number, y: number, radius: number, strokeColor: string, fillColor: string) {
-
+  static staticDraw({canvasContext, x, y, radius, strokeColor, fillColor}: {
+    canvasContext: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    radius: number,
+    strokeColor: string,
+    fillColor: string
+  }) {
     if (!canvasContext) return;
     canvasContext.arc(x, y, radius, 0, 2 * Math.PI);
     canvasContext.strokeStyle = strokeColor;
     canvasContext.fillStyle = fillColor;
     canvasContext.stroke();
     canvasContext.fill();
+    canvasContext.strokeStyle = toolSate.strokeColor;
+    canvasContext.fillStyle = toolSate.fillColor;
   }
 }

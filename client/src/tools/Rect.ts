@@ -1,4 +1,5 @@
-import Tool from "./Tool";
+import Tool     from "./Tool";
+import toolSate from "../store/toolSate";
 
 export default class Rect extends Tool {
   mouseDown: boolean = false;
@@ -81,12 +82,14 @@ export default class Rect extends Tool {
     }
   }
 
-  static staticDraw(canvasContext, x: number, y: number, height: number, weight: number, strokeColor: string, fillColor: string) {
+  static staticDraw({canvasContext, x, y, height, strokeColor, fillColor, weight} : {canvasContext, x: number, y: number, height: number, weight: number, strokeColor: string, fillColor: string}) {
     if (!canvasContext) return;
     canvasContext.rect(x, y, height, weight);
     canvasContext.strokeStyle = strokeColor;
     canvasContext.fillStyle = fillColor;
     canvasContext.stroke();
     canvasContext.fill();
+    canvasContext.strokeStyle = toolSate.strokeColor;
+    canvasContext.fillStyle = toolSate.fillColor;
   }
 }

@@ -1,4 +1,5 @@
-import Tool from "./Tool";
+import Tool     from "./Tool";
+import toolSate from "../store/toolSate";
 
 export default class Brush extends Tool {
   mouseDown: boolean = false;
@@ -52,10 +53,12 @@ export default class Brush extends Tool {
     }))
   }
 
-  static draw (canvasContext: CanvasRenderingContext2D, x: number, y: number, strokeColor: string, lineWidth: number) {
+  static draw ({canvasContext, x, y, strokeColor, lineWidth}:{canvasContext: CanvasRenderingContext2D, x: number, y: number, strokeColor: string, lineWidth: number}) {
       canvasContext.lineTo(x, y);
       canvasContext.strokeStyle = strokeColor;
       canvasContext.lineWidth = lineWidth;
       canvasContext.stroke();
+      canvasContext.strokeStyle = toolSate.strokeColor;
+      canvasContext.lineWidth = toolSate.lineWidth;
   }
 }

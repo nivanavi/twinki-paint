@@ -2,6 +2,10 @@ html {
     font-size: 10px;
 }
 
+html body{
+    overflow: hidden;
+}
+
 _:default:not(:root:root), html {
     animation: webkitfix 1s forwards infinite;
 }

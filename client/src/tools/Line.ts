@@ -1,4 +1,5 @@
-import Tool from "./Tool";
+import Tool     from "./Tool";
+import toolSate from "../store/toolSate";
 
 export default class Line extends Tool {
   mouseDown: boolean = false;
@@ -80,12 +81,14 @@ export default class Line extends Tool {
     }
   }
 
-  static staticDraw(canvasContext: CanvasRenderingContext2D, currentX: number, currentY: number, x: number, y: number, strokeColor: string, lineWidth: number) {
+  static staticDraw({canvasContext, currentY, currentX, x, y, lineWidth, strokeColor} : {canvasContext: CanvasRenderingContext2D, currentX: number, currentY: number, x: number, y: number, strokeColor: string, lineWidth: number}) {
     if (!canvasContext) return;
     canvasContext.moveTo(currentX, currentY)
     canvasContext.lineTo(x, y)
     canvasContext.lineWidth = lineWidth;
     canvasContext.strokeStyle = strokeColor;
     canvasContext.stroke()
+    canvasContext.lineWidth = toolSate.lineWidth;
+    canvasContext.strokeStyle = toolSate.strokeColor;
   }
 }

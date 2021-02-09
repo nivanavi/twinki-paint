@@ -49,7 +49,8 @@ export default class Brush extends Tool {
       figure: {
         x: pageX - offsetLeft,
         y: pageY - offsetTop,
-        username: canvasState.username,
+        prevX: (this.canvasContext as any).prevX,
+        prevY: (this.canvasContext as any).prevY,
         strokeColor: this.canvasContext.strokeStyle,
         lineWidth: this.canvasContext.lineWidth,
         type: "brush"
@@ -61,15 +62,12 @@ export default class Brush extends Tool {
                 canvasContext,
                 x,
                 y,
-                username,
                 strokeColor,
                 lineWidth
-              }: { canvasContext: any, x: number, y: number, strokeColor: string, username: string, lineWidth: number }) {
+              }: { canvasContext: any, x: number, y: number, strokeColor: string, lineWidth: number }) {
     canvasContext.moveTo(canvasContext.prevX, canvasContext.prevY);
-    if (username === canvasState.username) {
-      canvasContext.prevX = x;
-      canvasContext.prevY = y;
-    }
+    canvasContext.prevX = x;
+    canvasContext.prevY = y;
     canvasContext.lineTo(x, y);
     canvasContext.strokeStyle = strokeColor;
     canvasContext.lineWidth = lineWidth;

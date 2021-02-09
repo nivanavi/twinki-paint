@@ -15,72 +15,6 @@ import notificationState from "../../store/notificationState";
 const PORT: string | undefined = process.env.REACT_APP_PORT;
 const ADDRESS: string | undefined = process.env.REACT_APP_ADDRESS;
 
-const test = [
-  {
-    prevX: 300,
-    prevY: 100,
-    x: 300,
-    y: 102
-  },
-  {
-    prevX: 600,
-    prevY: 100,
-    x: 600,
-    y: 102
-  },
-  {
-    prevX: 300,
-    prevY: 102,
-    x: 300,
-    y: 104
-  },
-  {
-    prevX: 600,
-    prevY: 102,
-    x: 600,
-    y: 104
-  },
-  {
-    prevX: 300,
-    prevY: 104,
-    x: 300,
-    y: 106
-  },  {
-    prevX: 600,
-    prevY: 104,
-    x: 600,
-    y: 106
-  },
-  {
-    prevX: 300,
-    prevY: 106,
-    x: 300,
-    y: 108
-  },
-  {
-    prevX: 600,
-    prevY: 106,
-    x: 600,
-    y: 108
-  },
-  {
-    prevX: 300,
-    prevY: 108,
-    x: 300,
-    y: 110
-  },
-  {
-    prevX: 600,
-    prevY: 108,
-    x: 600,
-    y: 110
-  },
-];
-
-const testFill = test.map(item => ({...item, lineWidth: 1,
-  strokeColor: "#000000",
-  type: "brush",}))
-
 export const Canvas = observer(() => {
   const {id}: any = useParams();
   const canvasRef: { current: null | HTMLCanvasElement } = React.useRef(null);
@@ -122,16 +56,6 @@ export const Canvas = observer(() => {
         id,
         username: canvasState.username
       })))
-
-      setTimeout(() => {
-        testFill.forEach(item => {
-          socket.send(JSON.stringify({
-            method: "draw",
-            id,
-            figure: item
-          }))
-        })
-      }, 3000)
     }
     socket.onmessage = ({data}) => {
       if (!data) return;
